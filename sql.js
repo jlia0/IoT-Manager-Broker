@@ -4,10 +4,10 @@ var pg = require('pg');
 
 // Database config
 var config = {
-    user: "iobphfnwodostn",
-    database: "d4ff3bi33bcge9",
-    password: "97f0f8aa11c97461a5590d843b2b4215455938c721fd07c4950b464f594128c1",
-    host: "ec2-54-197-232-203.compute-1.amazonaws.com",
+    user: "lrbpvsxktxpmux",
+    database: "d3gaue7gl1u0k7",
+    password: "6ba81d6d22a932fd4db6c60eb0b6d24dee146236811f504c63f3c8a5fea03062",
+    host: "ec2-174-129-253-169.compute-1.amazonaws.com",
     port: 5432,
     ssl: true,
 
