@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var SQLQuery = require('./sql.js');
+
 // var Query = require('../actions.js');
 // var crypto = require('crypto');
 // var Getter = require('../getters.js');
