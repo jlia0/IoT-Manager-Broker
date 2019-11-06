@@ -12,9 +12,9 @@ var SQLQuery = require('../sql.js');
 router.get('/broker', function (req, res, next) {
     var query = "SELECT * FROM broker;"
 
-    SQLQuery(query, function (status, res) {
+    SQLQuery(query, function (status, sqlres) {
 
-        res.send(res.rows[0].ip);
+        res.send(sqlres.rows[0].ip);
 
     });
 
