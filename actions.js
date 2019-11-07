@@ -8,6 +8,23 @@ module.exports = function () {
 //
 // register().then().insertUser().then().getUserID().then().createProfile()
 
+// skeleton function for broker ID
+var getBrokerID = function(callback){
+    var status = -1;
+    var query = "SELECT * FROM public.broker;";
+    SQLQuery(query, function (err, res) {
+        if (err) {
+            status = 0;
+            callback(status);
+        }
+        else {
+            status = 1;
+            return query;
+        }
+    });
+};
+
+
 module.exports.register = function (email, username, pwd, md5, callback) {
     var status = -1;
     var query = "INSERT INTO public.registry (email, password, md5) VALUES ('" + email + "','" + pwd + "','" + md5 + "');";

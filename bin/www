@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+require('dotenv').config();     // usesd to hide information of DB
 /**
  * Module dependencies.
  */
