@@ -8,7 +8,13 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 //var SQLQuery = require('./sql.js');
 
+var mqtt = require('mqtt');
+var url = require('url');
+
 var app = express();
+
+var mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
+var topic = process.env.CLOUDMQTT_TOPIC || 'test';
 
 
 
@@ -41,6 +47,28 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+
+var client = mqtt.connect(mqtt_url);
+
+client.on('connect', function() { // When connected
+
+  // subscribe to a topic
+  client.subscribe(topic, function() {
+
+  });
+
+  // // publish a message to a topic
+  // client.publish(topic, 'my message', function() {
+  //   console.log("Message is published");
+  //   client.end(); // Close the connection when published
+  // });
+});
+
+// when a message arrives, do something with it
+client.on('message', function(topic, message, packet) {
+  console.log("Received '" + message + "' on '" + topic + "'");
 });
 
 module.exports = app;
