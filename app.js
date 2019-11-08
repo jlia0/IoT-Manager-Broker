@@ -94,13 +94,7 @@ function onConnect() {
 function onMessage(sensor, message, packet) {
 
   console.log("Received '" + message + "' on '" + sensor + "'");
-
-  if (addMessage(message, sensor) === 1){
-    console.log("Added message to database");
-  }
-  else {
-    console.log("Unable to add message to database");
-  }
+  console.log("Added message to database");
 }
 
 var addMessage = function(message, sensor, callback) {
@@ -110,14 +104,12 @@ var addMessage = function(message, sensor, callback) {
     if (err) {
       status = 0;
       callback(status);
-      return status;
     }
     else {
       status = 1;
-      return status;
     }
   });
-  //return status;
+  return status;
 };
 
 module.exports = app;
