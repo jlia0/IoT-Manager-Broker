@@ -96,6 +96,11 @@ function onMessage(sensor, message, packet) {
   console.log("Received '" + message + "' on '" + sensor + "'");
   actions.addMessage(message, sensor);
   console.log("Added message to database");
+
+  if (message === "action"){
+    console.log("action received");
+  }
+
 }
 
 module.exports = app;
