@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var SQLQuery = require('./sql.js');
+var actions = require('./actions');
 
 var mqtt = require('mqtt');
 var url = require('url');
@@ -92,25 +93,9 @@ function onConnect() {
  */
 
 function onMessage(sensor, message, packet) {
-
   console.log("Received '" + message + "' on '" + sensor + "'");
-  addMessage(message, sensor);
+  actions.addMessage(message, sensor);
   console.log("Added message to database");
 }
-
-var addMessage = function(message, sensor, callback) {
-  var status = -1;
-  var query = "INSERT INTO public.sensor (message, topic) VALUES ('" + message + "', '" + sensor + "');";
-  SQLQuery(query, function (err, res) {
-    if (err) {
-      status = 0;
-      callback(status);
-    }
-    else {
-      status = 1;
-    }
-  });
-  return status;
-};
 
 module.exports = app;
