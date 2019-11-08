@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var SQLQuery = require('./sql.js');
+//var SQLQuery = require('./sql.js');
 var actions = require('./actions');
 
 var mqtt = require('mqtt');
@@ -20,8 +20,7 @@ var app = express();
 // ---------------------- You can change the topic here ----------------------
 
 var mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
-var sensorTopic = process.env.CLOUDMQTT_TOPIC || 'sensor';
-var actionTopic = process.env.CLOUDMQTT_TOPIC || 'action';
+var Topic = [process.env.CLOUDMQTT_TOPIC || 'sensor','action'];
 var client = mqtt.connect(mqtt_url);
 client.on('connect', onConnect);
 
@@ -62,10 +61,7 @@ app.use(function(err, req, res, next) {
  */
 function onConnect() {
   // subscribe to a topic
-  client.subscribe(sensorTopic,function () {
-    client.on('message', onMessage);
-  });
-  client.subscribe(actionTopic,function () {
+  client.subscribe(Topic,function () {
     client.on('message', onMessage);
   });
 
@@ -81,14 +77,14 @@ function onConnect() {
  * Event listener for MQTT "Message" event.
  */
 
-function onMessage(topic, message, packet) {
-  if (topic === "sensor") {
-    console.log("Received '" + message + "' on '" + topic + "'");
-    actions.addMessage(message, topic);
+function onMessage(msgtopic, message, packet) {
+  if (msgtopic === "sensor") {
+    console.log("Received '" + message + "' on '" + msgtopic + "'");
+    actions.addMessage(message, msgtopic);
     console.log("Added message to database");
   }
-  else if (topic === "action") {
-    console.log("Action Received '" + message + "' on '" + topic + "'");
+  else if (msgtopic === "action") {
+    console.log("Action Received '" + message + "' on '" + msgtopic + "'");
   }
 
 
