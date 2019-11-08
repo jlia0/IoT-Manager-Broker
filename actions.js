@@ -42,4 +42,4 @@ module.exports.addMessage = function(message, sensor, callback) {
     }
   });
   return status;
-}
+};
