@@ -20,8 +20,7 @@ var app = express();
 // ---------------------- You can change the topic here ----------------------
 
 var mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
-var sensorTopic = process.env.CLOUDMQTT_TOPIC || 'sensor';
-var actionTopic = process.env.CLOUDMQTT_TOPIC || 'action';
+var sensor = process.env.CLOUDMQTT_TOPIC || 'sensor' || 'action';
 var client = mqtt.connect(mqtt_url);
 client.on('connect', onConnect);
 
@@ -62,11 +61,8 @@ app.use(function(err, req, res, next) {
  */
 function onConnect() {
   // subscribe to a topic
-  client.subscribe(sensorTopic,function () {
+  client.subscribe(sensor,function () {
     client.on('message', onMessage);
-  });
-  client.subscribe(actionTopic, function () {
-    client.on('action', onAction);
   });
 
   // publish a message to a topic
@@ -82,14 +78,16 @@ function onConnect() {
  */
 
 function onMessage(sensor, message, packet) {
-  console.log("Received '" + message + "' on '" + sensor + "'");
-  actions.addMessage(message, sensor);
-  console.log("Added message to database");
+  if (sensor === "sensor") {
+    console.log("Received '" + message + "' on '" + sensor + "'");
+    actions.addMessage(message, sensor);
+    console.log("Added message to database");
+  }
+  else if (sensor === "action") {
+    console.log("Action Received '" + action + "' on '" + sensor + "'");
+  }
 
-}
 
-function onAction(sensor, action, packet) {
-  console.log("Received '" + action + "'  '" + sensor + "'");
 }
 
 module.exports = app;
