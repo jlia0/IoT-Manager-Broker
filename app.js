@@ -14,16 +14,12 @@ var url = require('url');
 
 var app = express();
 
-
-
-
 // ---------------------- You can change the topic here ----------------------
 
 var mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
-var msgTopic = [process.env.CLOUDMQTT_TOPIC || 'sensor','action'];
+var msgTopic = [process.env.CLOUDMQTT_TOPIC || 'sensor', 'action'];
 var client = mqtt.connect(mqtt_url);
 client.on('connect', onConnect);
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,7 +39,6 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -55,13 +50,12 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-
 /**
  * Event listener for MQTT "connect" event.
  */
 function onConnect() {
   // subscribe to a topic
-  client.subscribe(msgTopic,function () {
+  client.subscribe(msgTopic, function() {
     client.on('message', onMessage);
   });
 
@@ -70,7 +64,6 @@ function onConnect() {
   //   console.log("Message is published");
   //   client.end(); // Close the connection when published
   // });
-
 }
 
 /**
@@ -78,12 +71,11 @@ function onConnect() {
  */
 
 function onMessage(topic, message, packet) {
-  if (topic === "sensor") {
+  if (topic === 'sensor') {
     console.log("Received '" + message + "' on '" + topic + "'");
     actions.addMessage(message, topic);
-    console.log("Added message to database");
-  }
-  else if (topic === "action") {
+    console.log('Added message to database');
+  } else if (topic === 'action') {
     console.log("Action Received '" + message + "' on '" + topic + "'");
   }
 }
