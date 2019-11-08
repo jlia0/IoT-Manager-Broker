@@ -94,6 +94,7 @@ function onConnect() {
 function onMessage(sensor, message, packet) {
 
   console.log("Received '" + message + "' on '" + sensor + "'");
+  addMessage(message, sensor);
   console.log("Added message to database");
 }
 
