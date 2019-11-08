@@ -15,7 +15,7 @@ router.get('/broker', function (req, res, next) {
     SQLQuery(query, function (status, sqlres) {
 
         if (status === 1) {
-            res.render(JSON.stringify(sqlres.rows));
+            res.send(JSON.stringify(sqlres.rows));
     }
 
     });
