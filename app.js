@@ -13,8 +13,15 @@ var url = require('url');
 
 var app = express();
 
+
+
+
+// ---------------------- You can change the topic here ----------------------
+
 var mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
 var topic = process.env.CLOUDMQTT_TOPIC || 'test';
+var client = mqtt.connect(mqtt_url);
+client.on('connect', onConnect);
 
 
 
@@ -50,25 +57,44 @@ app.use(function(err, req, res, next) {
 });
 
 
-var client = mqtt.connect(mqtt_url);
 
-client.on('connect', function() { // When connected
 
+
+
+// // when a message arrives, do something with it
+// client.on('message', function(topic, message, packet) {
+//
+// });
+
+
+/**
+ * Event listener for MQTT "connect" event.
+ */
+
+function onConnect() {
   // subscribe to a topic
-  client.subscribe(topic, function() {
+  client.subscribe(topic,function () {
+
+    client.on('message', onMessage);
 
   });
 
-  // // publish a message to a topic
+  // publish a message to a topic
   // client.publish(topic, 'my message', function() {
   //   console.log("Message is published");
   //   client.end(); // Close the connection when published
   // });
-});
 
-// when a message arrives, do something with it
-client.on('message', function(topic, message, packet) {
+}
+
+/**
+ * Event listener for MQTT "Message" event.
+ */
+
+function onMessage(topic, message, packet) {
+
   console.log("Received '" + message + "' on '" + topic + "'");
-});
+
+}
 
 module.exports = app;
