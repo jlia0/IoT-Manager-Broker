@@ -20,8 +20,8 @@ var app = express();
 // ---------------------- You can change the topic here ----------------------
 
 var mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
-var sensorTopic = process.env.CLOUDMQTT_TOPIC || 'sensor';
-var actionTopic = process.env.CLOUDMQTT_TOPIC || 'action';
+var sensorTopic = process.env.CLOUDMQTT_TOPIC && 'sensor';
+var actionTopic = process.env.CLOUDMQTT_TOPIC && 'action';
 var client = mqtt.connect(mqtt_url);
 client.on('connect', onConnect);
 
