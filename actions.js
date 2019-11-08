@@ -15,7 +15,7 @@ module.exports.getBrokerID = function(callback){
         }
         else {
             status = 1;
-            return query;
+            return res;
         }
     });
 };
@@ -33,5 +33,4 @@ module.exports.addMessage = function(message, sensor, callback) {
       status = 1;
     }
   });
-  return status;
 };

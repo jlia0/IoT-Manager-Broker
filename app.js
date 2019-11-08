@@ -21,7 +21,6 @@ var app = express();
 
 var mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
 var msgTopic = [process.env.CLOUDMQTT_TOPIC || 'sensor','action'];
-// var actionTopic = process.env.CLOUDMQTT_TOPIC || 'action';
 var client = mqtt.connect(mqtt_url);
 client.on('connect', onConnect);
 
@@ -65,9 +64,6 @@ function onConnect() {
   client.subscribe(msgTopic,function () {
     client.on('message', onMessage);
   });
-  // client.subscribe(actionTopic,function () {
-  //   client.on('message', onMessage);
-  // });
 
   // publish a message to a topic
   // client.publish(topic, 'my message', function() {
@@ -90,8 +86,6 @@ function onMessage(topic, message, packet) {
   else if (topic === "action") {
     console.log("Action Received '" + message + "' on '" + topic + "'");
   }
-
-
 }
 
 module.exports = app;
