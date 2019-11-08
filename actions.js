@@ -4,6 +4,11 @@ module.exports = function () {
 
 };
 
+// Skeleton function to insert message into DB
+module.exports.addMessage = function(message, topic, callback) {
+
+};
+
 // When register, it works like this
 //
 // register().then().insertUser().then().getUserID().then().createProfile()

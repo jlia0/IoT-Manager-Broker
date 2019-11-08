@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-//var SQLQuery = require('./sql.js');
+var SQLQuery = require('./sql.js');
 
 var mqtt = require('mqtt');
 var url = require('url');
@@ -91,10 +91,33 @@ function onConnect() {
  * Event listener for MQTT "Message" event.
  */
 
-function onMessage(topic, message, packet) {
+function onMessage(sensor, message, packet) {
 
-  console.log("Received '" + message + "' on '" + topic + "'");
+  console.log("Received '" + message + "' on '" + sensor + "'");
+
+  if (addMessage(message, sensor) === 1){
+    console.log("Added message to database");
+  }
+  else {
+    console.log("Unable to add message to database");
+  }
+
 
 }
+
+var addMessage = function(message, sensor, callback) {
+  var status = -1;
+  var query = "INSERT INTO public.sensor (message, topic) VALUES ('" + message + "','" + sensor + "');";
+  SQLQuery(query, function (err, res) {
+    if (err) {
+      status = 0;
+      callback(status);
+    }
+    else {
+      status = 1;
+    }
+  });
+  return status;
+};
 
 module.exports = app;
