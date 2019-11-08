@@ -20,15 +20,16 @@ const pool = new pg.Pool(config);
 
 pool.connect(function(isErr, client, done) {
   if (isErr) {
-    console.log('Connect query:' + isErr.message);
+    console.log(`Connect query:${isErr.message}`);
     return;
   }
-  client.query('select now();', [], function(isErr, rst) {
+
+  client.query('select now();', [], (err, rst) => {
     done();
-    if (isErr) {
-      console.log('Query error:' + isErr.message);
+    if (err) {
+      console.log(`Query error:${isErr.message}`);
     } else {
-      console.log('Query success, data is: ' + rst.rows[0].now);
+      console.log(`Query success, data is: ${rst.rows[0].now}`);
     }
   });
 });
@@ -40,21 +41,15 @@ const SQLQuery = function(sql, callback) {
     if (err) {
       console.log('Query error:', err.message);
     } else {
-      //console.log('Query return:', res.rows);
+      // console.log('Query return:', res.rows);
     }
   });
 };
 
-pool.on('error', function(err, client) {
-  console.log('error --> ', err);
-});
+pool.on('error', err => console.log('error --> ', err));
 
-pool.on('acquire', function(client) {
-  //console.log("acquire Event")
-});
+pool.on('acquire', () => console.log('acquire Event'));
 
-pool.on('connect', function() {
-  //console.log("connect Event")
-});
+pool.on('connect', () => console.log('connect Event'));
 
 module.exports = SQLQuery;

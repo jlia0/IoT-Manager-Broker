@@ -1,24 +1,22 @@
+/* eslint-disable no-use-before-define */
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+const mqtt = require('mqtt');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const SQLQuery = require('./sql.js');
 const actions = require('./actions');
-
-const mqtt = require('mqtt');
-const url = require('url');
 
 const app = express();
 
 // ---------------------- You can change the topic here ----------------------
 
-const mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
+const mqttUrl = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
 const msgTopic = [process.env.CLOUDMQTT_TOPIC || 'sensor', 'action'];
-const client = mqtt.connect(mqtt_url);
+const client = mqtt.connect(mqttUrl);
 client.on('connect', onConnect);
 
 // view engine setup
@@ -35,12 +33,10 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+app.use((req, res, next) => next(createError(404)));
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -72,11 +68,11 @@ function onConnect() {
 
 function onMessage(topic, message, packet) {
   if (topic === 'sensor') {
-    console.log("Received '" + message + "' on '" + topic + "'");
+    console.log(`Received '${message}' on '${topic}'. packet: ${packet}`);
     actions.addMessage(message, topic);
     console.log('Added message to database');
   } else if (topic === 'action') {
-    console.log("Action Received '" + message + "' on '" + topic + "'");
+    console.log(`Action Received '${message}' on '${topic}'`);
   }
 }
 

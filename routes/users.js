@@ -1,14 +1,14 @@
 const express = require('express');
 const SQLQuery = require('../sql.js');
 
-var router = express.Router();
+const router = express.Router();
 // var Query = require('../actions.js');
 // var crypto = require('crypto');
 // var Getter = require('../getters.js');
 // var Setter = require('../setters.js');
 // var md5cryto = crypto.createHash('md5');
 
-router.get('/broker', function(req, res, next) {
+router.get('/broker', function(req, res) {
   const query = 'SELECT * FROM broker;';
 
   SQLQuery(query, (status, sqlres) => {

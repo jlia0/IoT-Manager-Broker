@@ -1,27 +1,26 @@
 const SQLQuery = require('./sql.js');
 
-module.exports = function() {};
-
 // skeleton function for broker ID
 module.exports.getBrokerID = function(callback) {
-  var status = -1;
-  var query = 'SELECT * FROM public.broker;';
-  SQLQuery(query, function(err, res) {
+  let status = -1;
+  const query = 'SELECT * FROM public.broker;';
+  SQLQuery(query, (err, res) => {
     if (err) {
       status = 0;
       callback(status);
     } else {
       status = 1;
-      return res;
     }
+
+    return res;
   });
 };
 
 // Add the message received from client and store it on the database
-module.exports.addMessage = function(message, sensor, callback) {
-  var status = -1;
-  var query = "INSERT INTO public.sensor (message, topic) VALUES ('" + message + "', '" + sensor + "');";
-  SQLQuery(query, function(err, res) {
+module.exports.addMessage = function addMessage(message, sensor, callback) {
+  let status = -1;
+  const query = `INSERT INTO public.sensor (message, topic) VALUES ('${message}', '${sensor}');`;
+  SQLQuery(query, err => {
     if (err) {
       status = 0;
       callback(status);
