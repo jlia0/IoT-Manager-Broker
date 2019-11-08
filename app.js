@@ -84,7 +84,7 @@ function onMessage(sensor, message, packet) {
     console.log("Added message to database");
   }
   else if (sensor === "action") {
-    console.log("Action Received '" + action + "' on '" + sensor + "'");
+    console.log("Action Received '" + sensor + "' on '" + sensor + "'");
   }
 
 
