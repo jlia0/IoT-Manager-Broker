@@ -81,15 +81,17 @@ function onConnect() {
  * Event listener for MQTT "Message" event.
  */
 
-function onMessage(sensor, message, packet) {
-  if (sensor === "sensor") {
-    console.log("Received '" + message + "' on '" + sensor + "'");
-    actions.addMessage(message, sensor);
+function onMessage(topic, message, packet) {
+  if (topic === "sensor") {
+    console.log("Received '" + message + "' on '" + topic + "'");
+    actions.addMessage(message, topic);
     console.log("Added message to database");
   }
-  else if (sensor === "action") {
-    console.log("Action Received '" + message + "' on '" + sensor + "'");
+  else if (topic === "action") {
+    console.log("Action Received '" + message + "' on '" + topic + "'");
   }
+
+
 }
 
 module.exports = app;
