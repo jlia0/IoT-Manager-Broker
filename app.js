@@ -19,7 +19,7 @@ var app = express();
 // ---------------------- You can change the topic here ----------------------
 
 var mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
-var topic = process.env.CLOUDMQTT_TOPIC || 'test';
+var topic = process.env.CLOUDMQTT_TOPIC || 'sensor';
 var client = mqtt.connect(mqtt_url);
 client.on('connect', onConnect);
 
@@ -101,23 +101,23 @@ function onMessage(sensor, message, packet) {
   else {
     console.log("Unable to add message to database");
   }
-
-
 }
 
 var addMessage = function(message, sensor, callback) {
   var status = -1;
-  var query = "INSERT INTO public.sensor (message, topic) VALUES ('" + message + "','" + sensor + "');";
+  var query = "INSERT INTO public.sensor (message, topic) VALUES ('" + message + "', '" + sensor + "');";
   SQLQuery(query, function (err, res) {
     if (err) {
       status = 0;
       callback(status);
+      return status;
     }
     else {
       status = 1;
+      return status;
     }
   });
-  return status;
+  //return status;
 };
 
 module.exports = app;
