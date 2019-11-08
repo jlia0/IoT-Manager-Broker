@@ -89,6 +89,8 @@ function onMessage(topic, message, packet) {
   }
   else if (topic === "action") {
     console.log("Action Received '" + message + "' on '" + topic + "'");
+    actions.addMessage(message, topic);
+    console.log("Added action to database");
   }
 
 
