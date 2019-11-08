@@ -1,8 +1,8 @@
 // connect with PostgresSQL
-var pg = require('pg');
+const pg = require('pg');
 
 // Database config
-var config = {
+const config = {
   user: process.env.DB_user,
   database: process.env.DB,
   password: process.env.DB_password,
@@ -16,7 +16,7 @@ var config = {
   reapIntervalMillis: 10000,
 };
 
-var pool = new pg.Pool(config);
+const pool = new pg.Pool(config);
 
 pool.connect(function(isErr, client, done) {
   if (isErr) {
@@ -33,7 +33,7 @@ pool.connect(function(isErr, client, done) {
   });
 });
 
-var SQLQuery = function(sql, callback) {
+const SQLQuery = function(sql, callback) {
   pool.query(sql, (err, res) => {
     callback(err, res);
 

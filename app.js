@@ -1,24 +1,24 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var SQLQuery = require('./sql.js');
-var actions = require('./actions');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const SQLQuery = require('./sql.js');
+const actions = require('./actions');
 
-var mqtt = require('mqtt');
-var url = require('url');
+const mqtt = require('mqtt');
+const url = require('url');
 
-var app = express();
+const app = express();
 
 // ---------------------- You can change the topic here ----------------------
 
-var mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
-var msgTopic = [process.env.CLOUDMQTT_TOPIC || 'sensor', 'action'];
-var client = mqtt.connect(mqtt_url);
+const mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
+const msgTopic = [process.env.CLOUDMQTT_TOPIC || 'sensor', 'action'];
+const client = mqtt.connect(mqtt_url);
 client.on('connect', onConnect);
 
 // view engine setup

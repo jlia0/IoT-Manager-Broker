@@ -1,4 +1,4 @@
-var SQLQuery = require('./sql.js');
+const SQLQuery = require('./sql.js');
 
 module.exports = function() {};
 
