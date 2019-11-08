@@ -65,9 +65,9 @@ function onConnect() {
   client.subscribe(sensorTopic,function () {
     client.on('message', onMessage);
   });
-  client.subscribe(actionTopic,function () {
-    client.on('message', onMessage);
-  });
+  // client.subscribe(actionTopic,function () {
+  //   client.on('message', onMessage);
+  // });
 
   // publish a message to a topic
   // client.publish(topic, 'my message', function() {
