@@ -21,13 +21,13 @@ git clone git@github.com:JLiao98/IoT-Manager-Broker.git
 Install dependencies:
 
 ```sh
-npm install
+yarn
 ```
 
 ## Usage
 
 ```sh
-npm run start
+yarn start
 ```
 
 Once the server started, open [localhost:3000/](http://localhost:3000/) in your browser.
