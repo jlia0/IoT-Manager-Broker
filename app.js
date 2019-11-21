@@ -1,29 +1,23 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+/* eslint-disable no-use-before-define */
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var SQLQuery = require('./sql.js');
-var actions = require('./actions');
+const mqtt = require('mqtt');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const actions = require('./actions');
 
-var mqtt = require('mqtt');
-var url = require('url');
-
-var app = express();
-
-
-
+const app = express();
 
 // ---------------------- You can change the topic here ----------------------
 
-var mqtt_url = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
-var msgTopic = [process.env.CLOUDMQTT_TOPIC || 'sensor','action'];
-var client = mqtt.connect(mqtt_url);
+const mqttUrl = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
+const msgTopic = [process.env.CLOUDMQTT_TOPIC || 'sensor', 'action'];
+const client = mqtt.connect(mqttUrl);
 client.on('connect', onConnect);
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,13 +33,10 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
+app.use((req, res, next) => next(createError(404)));
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -55,13 +46,12 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-
 /**
  * Event listener for MQTT "connect" event.
  */
 function onConnect() {
   // subscribe to a topic
-  client.subscribe(msgTopic,function () {
+  client.subscribe(msgTopic, function() {
     client.on('message', onMessage);
   });
 
@@ -70,7 +60,6 @@ function onConnect() {
   //   console.log("Message is published");
   //   client.end(); // Close the connection when published
   // });
-
 }
 
 /**
@@ -78,13 +67,12 @@ function onConnect() {
  */
 
 function onMessage(topic, message, packet) {
-  if (topic === "sensor") {
-    console.log("Received '" + message + "' on '" + topic + "'");
+  if (topic === 'sensor') {
+    console.log(`Received '${message}' on '${topic}'. packet: ${packet}`);
     actions.addMessage(message, topic);
-    console.log("Added message to database");
-  }
-  else if (topic === "action") {
-    console.log("Action Received '" + message + "' on '" + topic + "'");
+    console.log('Added message to database');
+  } else if (topic === 'action') {
+    console.log(`Action Received '${message}' on '${topic}'`);
   }
 }
 
