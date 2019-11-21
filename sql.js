@@ -1,6 +1,17 @@
 // connect with PostgresSQL
 const pg = require('pg');
 
+// Connect with mongo
+const mongodb = require('mongodb');
+
+mongodb.connect(process.env.Mongo_URL, function(err) {
+  if (!err) {
+    console.log('connected');
+  } else {
+    console.log('mongo failed to connect');
+  }
+});
+
 // Database config
 const config = {
   user: process.env.DB_user,

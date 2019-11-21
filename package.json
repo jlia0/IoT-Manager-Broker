@@ -20,7 +20,8 @@
     "morgan": "~1.9.1",
     "mqtt": "^3.0.0",
     "node-sass-middleware": "0.11.0",
-    "pg": "^7.12.1"
+    "pg": "^7.12.1",
+    "mongodb": "3.3.4"
   },
   "devDependencies": {
     "eslint": "^6.6.0",
