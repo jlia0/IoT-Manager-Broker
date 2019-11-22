@@ -1,44 +1,38 @@
-const { SQLQuery } = require('./sql.js');
+const { SQL } = require('./sql.js');
 
-// skeleton function for broker ID
-module.exports.getBrokerID = function(callback) {
-  let status = -1;
+module.exports.getBroker = async () => {
   const query = 'SELECT * FROM public.broker;';
-  SQLQuery(query, (err, res) => {
-    if (err) {
-      status = 0;
-      callback(status);
-    } else {
-      status = 1;
-    }
 
-    return res;
-  });
+  try {
+    const { rows } = await SQL(query);
+    return rows;
+  } catch (err) {
+    console.error(err);
+    return `Failed to get broker: ${err.message}`;
+  }
 };
 
 // Add the message received from client and store it on the database
-module.exports.addMessage = function addMessage(message, sensor, callback) {
-  let status = -1;
+module.exports.storeData = async (message, sensor) => {
   const query = `INSERT INTO public.sensor (message, topic) VALUES ('${message}', '${sensor}');`;
-  SQLQuery(query, err => {
-    if (err) {
-      status = 0;
-      callback(status);
-    } else {
-      status = 1;
-    }
-  });
+
+  try {
+    const { rows } = await SQL(query);
+    return rows;
+  } catch (err) {
+    console.error(err);
+    return `Failed to store data: ${err.message}`;
+  }
 };
 
-module.exports.getDevices = function getDevices(callback) {
-  let status = -1;
+module.exports.getDevices = async () => {
   const query = 'SELECT device_id FROM public.device';
-  SQLQuery(query, err => {
-    if (err) {
-      status = 0;
-      callback(status);
-    } else {
-      status = 1;
-    }
-  });
+
+  try {
+    const { rows } = await SQL(query);
+    return rows;
+  } catch (err) {
+    console.error(err);
+    return `Failed to get devices: ${err.message}`;
+  }
 };
