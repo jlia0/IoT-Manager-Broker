@@ -6,7 +6,7 @@ const mongodb = require('mongodb');
 
 mongodb.connect(process.env.Mongo_URL, function(err) {
   if (!err) {
-    console.log('connected');
+    console.log('Mongo connected');
   } else {
     console.log('mongo failed to connect');
   }
