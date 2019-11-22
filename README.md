@@ -42,6 +42,10 @@ Once the server started, open [localhost:3000/](http://localhost:3000/) in your 
 
 - Github: [@raksdewji](https://github.com/raksdewji)
 
+👤 **Artem Golovin**
+
+- Github: [@awave1](https://github.com/awave1)
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/JLiao98/IoT-Manager-Broker/issues).
