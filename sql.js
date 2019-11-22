@@ -50,9 +50,7 @@ const SQLQuery = function(sql, callback) {
     callback(err, res);
 
     if (err) {
-      console.log('Query error:', err.message);
-    } else {
-      // console.log('Query return:', res.rows);
+      console.error(err);
     }
   });
 };
