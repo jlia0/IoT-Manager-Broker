@@ -1,4 +1,4 @@
-const SQLQuery = require('./sql.js');
+const { SQLQuery } = require('./sql.js');
 
 // skeleton function for broker ID
 module.exports.getBrokerID = function(callback) {
@@ -20,6 +20,19 @@ module.exports.getBrokerID = function(callback) {
 module.exports.addMessage = function addMessage(message, sensor, callback) {
   let status = -1;
   const query = `INSERT INTO public.sensor (message, topic) VALUES ('${message}', '${sensor}');`;
+  SQLQuery(query, err => {
+    if (err) {
+      status = 0;
+      callback(status);
+    } else {
+      status = 1;
+    }
+  });
+};
+
+module.exports.getDevices = function getDevices(callback) {
+  let status = -1;
+  const query = 'SELECT device_id FROM public.device';
   SQLQuery(query, err => {
     if (err) {
       status = 0;

@@ -1,6 +1,17 @@
 // connect with PostgresSQL
 const pg = require('pg');
 
+// Connect with mongo
+const mongodb = require('mongodb');
+
+mongodb.connect(process.env.Mongo_URL, function(err) {
+  if (!err) {
+    console.log('Mongo connected');
+  } else {
+    console.log('mongo failed to connect');
+  }
+});
+
 // Database config
 const config = {
   user: process.env.DB_user,
@@ -39,10 +50,20 @@ const SQLQuery = function(sql, callback) {
     callback(err, res);
 
     if (err) {
-      console.log('Query error:', err.message);
-    } else {
-      // console.log('Query return:', res.rows);
+      console.error(err);
     }
+  });
+};
+
+const SQL = query => {
+  return new Promise((resolve, reject) => {
+    pool.query(query, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
   });
 };
 
@@ -52,4 +73,4 @@ pool.on('acquire', () => console.log('acquire Event'));
 
 pool.on('connect', () => console.log('connect Event'));
 
-module.exports = SQLQuery;
+module.exports = { SQLQuery, SQL };
