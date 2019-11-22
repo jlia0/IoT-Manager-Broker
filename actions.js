@@ -29,3 +29,16 @@ module.exports.addMessage = function addMessage(message, sensor, callback) {
     }
   });
 };
+
+module.exports.getDevices = function getDevices(callback) {
+  let status = -1;
+  const query = 'SELECT device_id FROM public.device';
+  SQLQuery(query, err => {
+    if (err) {
+      status = 0;
+      callback(status);
+    } else {
+      status = 1;
+    }
+  });
+};

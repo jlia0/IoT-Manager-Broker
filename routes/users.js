@@ -12,9 +12,15 @@ router.get('/broker', function(req, res) {
   const query = 'SELECT * FROM broker;';
 
   SQLQuery(query, (status, sqlres) => {
-    if (status === 1) {
-      res.send(JSON.stringify(sqlres.rows));
-    }
+    if (status === 1) res.send(JSON.stringify(sqlres.rows));
+  });
+});
+
+router.get('/device', function(req, res) {
+  const query = 'SELECT device_id FROM public.device;';
+
+  SQLQuery(query, (status, sqlres) => {
+    if (status === 1) res.send(JSON.stringify(sqlres.rows));
   });
 });
 
