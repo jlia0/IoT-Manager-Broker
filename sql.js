@@ -55,10 +55,22 @@ const SQLQuery = function(sql, callback) {
   });
 };
 
+const SQL = query => {
+  return new Promise((resolve, reject) => {
+    pool.query(query, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(res);
+      }
+    });
+  });
+};
+
 pool.on('error', err => console.log('error --> ', err));
 
 pool.on('acquire', () => console.log('acquire Event'));
 
 pool.on('connect', () => console.log('connect Event'));
 
-module.exports = SQLQuery;
+module.exports = { SQLQuery, SQL };

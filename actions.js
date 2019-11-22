@@ -1,4 +1,4 @@
-const SQLQuery = require('./sql.js');
+const { SQLQuery } = require('./sql.js');
 
 // skeleton function for broker ID
 module.exports.getBrokerID = function(callback) {
