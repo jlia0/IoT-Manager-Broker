@@ -1,19 +1,32 @@
 const express = require('express');
-const { SQL } = require('../sql.js');
+const action = require('../actions.js');
 
 const router = express.Router();
 
-router.get('/device', async (req, res) => {
-  const query = 'SELECT device_id FROM public.device;';
+router.get('/device', (req, res) => {
+  action
+    .getDevices()
+    .then(rtn => {
+      res.send(rtn);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500);
+      res.send({ error: err });
+    });
+});
 
-  try {
-    const { rows } = await SQL(query);
-    res.send(rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500);
-    res.send({ error: 'failed to get devices' });
-  }
+router.get('/broker', (req, res) => {
+  action
+    .getBroker()
+    .then(rtn => {
+      res.send(rtn);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500);
+      res.send({ error: err });
+    });
 });
 
 module.exports = router;

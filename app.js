@@ -69,8 +69,14 @@ function onConnect() {
 function onMessage(topic, message, packet) {
   if (topic === 'sensor') {
     console.log(`Received '${message}' on '${topic}'. packet: ${packet}`);
-    actions.addMessage(message, topic);
-    console.log('Added message to database');
+    actions
+      .storeData(message, topic)
+      .then(() => {
+        console.log('Added data to database');
+      })
+      .catch(err => {
+        console.error(err);
+      });
   } else if (topic === 'action') {
     console.log(`Action Received '${message}' on '${topic}'`);
   }

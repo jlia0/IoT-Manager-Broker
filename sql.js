@@ -45,16 +45,6 @@ pool.connect(function(isErr, client, done) {
   });
 });
 
-const SQLQuery = function(sql, callback) {
-  pool.query(sql, (err, res) => {
-    callback(err, res);
-
-    if (err) {
-      console.error(err);
-    }
-  });
-};
-
 const SQL = query => {
   return new Promise((resolve, reject) => {
     pool.query(query, (err, res) => {
@@ -73,4 +63,4 @@ pool.on('acquire', () => console.log('acquire Event'));
 
 pool.on('connect', () => console.log('connect Event'));
 
-module.exports = { SQLQuery, SQL };
+module.exports = { SQL };
