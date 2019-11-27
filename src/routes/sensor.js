@@ -6,7 +6,7 @@ const router = express.Router();
 // Fetch all data (meh)
 router.get('/', async (req, res) => {
   try {
-    const sensorData = await Sensor.find().exec();
+    const sensorData = await Sensor.find();
     res.send(sensorData);
   } catch (err) {
     res.status = 500;
@@ -16,19 +16,43 @@ router.get('/', async (req, res) => {
 
 // Fetch data for device with :search
 // e.g. localhost:3000/sensor/1
-//      localhost:3000/sensor/weather
-router.get('/:search', (req, res) => {
+router.get('/:deviceId', async (req, res) => {
   // get the id from the url
-  const { search } = req.params;
+  const { deviceId } = req.params;
 
-  if (!Number.isNaN(search)) {
-    // search by id
-  } else {
-    // search by device
+  if (Number.isNaN(deviceId)) {
+    res.status(500).send({ error: 'please provide a valid id' });
   }
 
-  const dummy = search;
-  res.send({ dummy });
+  try {
+    const sensorData = await Sensor.find({ deviceId: Number(deviceId) });
+    res.send(sensorData);
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+});
+
+router.get('/topic/:topic/:deviceId?', async (req, res) => {
+  const { topic, deviceId } = req.params;
+
+  const query = {
+    topic,
+  };
+
+  if (deviceId) {
+    if (Number.isNaN(deviceId)) {
+      res.status(500).send({ error: 'please provide a valid id' });
+    }
+
+    query.deviceId = Number(deviceId);
+  }
+
+  try {
+    const sensorData = await Sensor.find(query);
+    res.send(sensorData);
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
 });
 
 // Save sensor data
