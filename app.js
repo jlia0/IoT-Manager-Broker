@@ -7,7 +7,7 @@ const mqtt = require('mqtt');
 const mongoose = require('mongoose');
 
 const actions = require('./src/actions/actions');
-const { indexRouter, usersRouter } = require('./src/routes/index');
+const { indexRouter, usersRouter, sensorRoute } = require('./src/routes/index');
 
 const app = express();
 
@@ -23,6 +23,7 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/sensor', sensorRoute);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => next(createError(404)));
