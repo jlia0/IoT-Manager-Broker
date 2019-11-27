@@ -1,33 +1,24 @@
 /* eslint-disable no-use-before-define */
 const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
 const mqtt = require('mqtt');
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const actions = require('./actions');
+
+const actions = require('./src/actions/actions');
+const { indexRouter, usersRouter } = require('./src/routes/index');
 
 const app = express();
-
-// ---------------------- You can change the topic here ----------------------
 
 const mqttUrl = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
 const msgTopic = [process.env.CLOUDMQTT_TOPIC || 'sensor', 'action'];
 const client = mqtt.connect(mqttUrl);
 client.on('connect', onConnect);
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -50,22 +41,16 @@ app.use((err, req, res) => {
  * Event listener for MQTT "connect" event.
  */
 function onConnect() {
-  // subscribe to a topic
+  client.publish('broker/connected', 'true');
+
   client.subscribe(msgTopic, function() {
     client.on('message', onMessage);
   });
-
-  // publish a message to a topic
-  // client.publish(topic, 'my message', function() {
-  //   console.log("Message is published");
-  //   client.end(); // Close the connection when published
-  // });
 }
 
 /**
  * Event listener for MQTT "Message" event.
  */
-
 function onMessage(topic, message, packet) {
   if (topic === 'sensor') {
     console.log(`Received '${message}' on '${topic}'. packet: ${packet}`);
@@ -80,6 +65,13 @@ function onMessage(topic, message, packet) {
   } else if (topic === 'action') {
     console.log(`Action Received '${message}' on '${topic}'`);
   }
+
+  // simple regex to match either:
+  // 1. a string: "topic"
+  // 2. string with a slash: "topic/somethingelse"
+  // if (/([A-Za-z0-9]+$|[A-Za-z0-9]+\/[A-Za-z0-9]+$)/g.test(topic)) {
+  // const data = parseMessage(message);
+  // }
 }
 
 module.exports = app;
