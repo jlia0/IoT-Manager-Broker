@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
     "lint:js": "eslint --ext .js . --ignore-pattern \"node_modules/\"",
     "fix:other": "yarn prettier --write",
     "fix:js": "yarn test:js --fix",
@@ -16,11 +17,12 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "mongodb": "3.3.4",
+    "mongoose": "^5.7.12",
     "morgan": "~1.9.1",
     "mqtt": "^3.0.0",
     "node-sass-middleware": "0.11.0",
-    "pg": "^7.12.1",
-    "mongodb": "3.3.4"
+    "pg": "^7.12.1"
   },
   "devDependencies": {
     "eslint": "^6.6.0",
@@ -32,6 +34,7 @@
     "eslint-plugin-react": "^7.16.0",
     "husky": "^3.0.9",
     "lint-staged": "^9.4.2",
+    "nodemon": "^2.0.1",
     "prettier": "^1.18.2",
     "pretty-quick": "^2.0.1"
   },
