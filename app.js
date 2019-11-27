@@ -5,14 +5,14 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mqtt = require('mqtt');
 const mongoose = require('mongoose');
-
 const actions = require('./src/actions/actions');
 const { indexRouter, usersRouter, sensorRoute } = require('./src/routes/index');
+const { parseMessage } = require('./src/utils');
 
 const app = express();
 
 const mqttUrl = process.env.CLOUDMQTT_URL || 'mqtt://localhost:1883';
-const msgTopic = [process.env.CLOUDMQTT_TOPIC || 'sensor', 'action'];
+const msgTopic = '#'; // subscribe to *all* topics
 const client = mqtt.connect(mqttUrl);
 client.on('connect', onConnect);
 
@@ -52,35 +52,30 @@ mongodb.once('open', () => console.log('mongodb: connection established'));
 function onConnect() {
   client.publish('broker/connected', 'true');
 
-  client.subscribe(msgTopic, function() {
-    client.on('message', onMessage);
+  client.subscribe(msgTopic, () => {
+    client.on('message', async (topic, message) => onMessage(topic, message));
   });
 }
 
-/**
- * Event listener for MQTT "Message" event.
- */
-function onMessage(topic, message, packet) {
-  if (topic === 'sensor') {
-    console.log(`Received '${message}' on '${topic}'. packet: ${packet}`);
-    actions
-      .storeData(message, topic)
-      .then(() => {
-        console.log('Added data to database');
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  } else if (topic === 'action') {
-    console.log(`Action Received '${message}' on '${topic}'`);
-  }
-
+// NOTE: topic can contain only strings, "-" and "_"
+async function onMessage(topic, message) {
   // simple regex to match either:
   // 1. a string: "topic"
   // 2. string with a slash: "topic/somethingelse"
-  // if (/([A-Za-z0-9]+$|[A-Za-z0-9]+\/[A-Za-z0-9]+$)/g.test(topic)) {
-  // const data = parseMessage(message);
-  // }
+  if (/([A-Za-z\-_]+$|[A-Za-z\-_]+\/[A-Za-z\-_]+$)/g.test(topic)) {
+    const parsed = parseMessage(message);
+    let deviceId = -1;
+    let data = [];
+
+    if (parsed instanceof Object) {
+      deviceId = parsed.from || parsed.device || parsed.deviceId || -1;
+      data = [...parsed.data];
+    } else {
+      data = [parsed];
+    }
+
+    await actions.saveSensorData({ data, topic, deviceId });
+  }
 }
 
 module.exports = app;

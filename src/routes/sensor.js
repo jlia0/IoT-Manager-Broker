@@ -1,5 +1,6 @@
 const express = require('express');
 const { Sensor } = require('../db/models');
+const actions = require('../actions/actions');
 
 const router = express.Router();
 
@@ -56,6 +57,14 @@ router.get('/topic/:topic/:deviceId?', async (req, res) => {
 });
 
 // Save sensor data
-// router.post('/', (req, res) => {});
+router.post('/', async (req, res) => {
+  try {
+    // save it to the db
+    await actions.saveSensorData(req.body);
+    res.status(200).json({ saved: true });
+  } catch (err) {
+    res.status(500).send({ saved: false, error: err.message });
+  }
+});
 
 module.exports = router;

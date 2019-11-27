@@ -9,6 +9,10 @@ const sensorSchema = new Schema({
     type: [Number],
     required: true,
   },
+  deviceId: {
+    type: Number,
+    required: true,
+  },
 });
 
 module.exports = model('sensor', sensorSchema, 'sensor');

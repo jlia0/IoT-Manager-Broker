@@ -1,4 +1,5 @@
 const { SQL } = require('../db/sql.js');
+const { Sensor } = require('../db/models');
 
 module.exports.getBroker = async () => {
   const query = 'SELECT * FROM public.broker;';
@@ -34,5 +35,25 @@ module.exports.getDevices = async () => {
   } catch (err) {
     console.error(err);
     return `Failed to get devices: ${err.message}`;
+  }
+};
+
+module.exports.saveSensorData = async body => {
+  const { data, deviceId, topic } = body;
+
+  try {
+    // create new entry
+    const sensorData = new Sensor({
+      data: data.map(e => Number(e)), // ensure that the data is numeric
+      deviceId: Number(deviceId),
+      topic,
+    });
+
+    // save it to the db
+    await sensorData.save();
+    console.log('data saved to mongo', body);
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
 };
