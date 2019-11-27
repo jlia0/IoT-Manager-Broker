@@ -1,4 +1,4 @@
-const { SQL } = require('./sql.js');
+const { SQL } = require('../db/sql.js');
 
 module.exports.getBroker = async () => {
   const query = 'SELECT * FROM public.broker;';

@@ -1,5 +1,5 @@
 const express = require('express');
-const action = require('../actions.js');
+const action = require('../actions/actions.js');
 
 const router = express.Router();
 
