@@ -1,17 +1,6 @@
 // connect with PostgresSQL
 const pg = require('pg');
 
-// Connect with mongo
-const mongodb = require('mongodb');
-
-mongodb.connect(process.env.Mongo_URL, function(err) {
-  if (!err) {
-    console.log('Mongo connected');
-  } else {
-    console.log('mongo failed to connect');
-  }
-});
-
 // Database config
 const config = {
   user: process.env.DB_user,
@@ -29,19 +18,20 @@ const config = {
 
 const pool = new pg.Pool(config);
 
-pool.connect(function(isErr, client, done) {
+pool.connect((isErr, client, done) => {
   if (isErr) {
     console.log(`Connect query:${isErr.message}`);
     return;
   }
 
-  client.query('select now();', [], (err, rst) => {
-    done();
+  client.query('select now();', [], (err, queryResult) => {
     if (err) {
-      console.log(`Query error:${isErr.message}`);
+      console.log('postgresql: connection failed ->', err);
     } else {
-      console.log(`Query success, data is: ${rst.rows[0].now}`);
+      console.log(`postgresql: connection established (${queryResult.rows[0].now})`);
     }
+
+    done();
   });
 });
 
@@ -57,10 +47,6 @@ const SQL = query => {
   });
 };
 
-pool.on('error', err => console.log('error --> ', err));
-
-pool.on('acquire', () => console.log('acquire Event'));
-
-pool.on('connect', () => console.log('connect Event'));
+pool.on('error', err => console.log('postgresql: error ->', err));
 
 module.exports = { SQL };

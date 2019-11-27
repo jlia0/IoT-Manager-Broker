@@ -4,6 +4,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mqtt = require('mqtt');
+const mongoose = require('mongoose');
 
 const actions = require('./src/actions/actions');
 const { indexRouter, usersRouter } = require('./src/routes/index');
@@ -36,6 +37,13 @@ app.use((err, req, res) => {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// Establish MongoDB connection
+mongoose.connect(process.env.Mongo_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+const mongodb = mongoose.connection;
+
+mongodb.on('error', err => console.error(err));
+mongodb.once('open', () => console.log('mongodb: connection established'));
 
 /**
  * Event listener for MQTT "connect" event.
