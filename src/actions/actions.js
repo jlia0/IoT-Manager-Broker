@@ -44,7 +44,7 @@ module.exports.saveSensorData = async body => {
   try {
     // create new entry
     const sensorData = new Sensor({
-      data: data.map(e => Number(e)), // ensure that the data is numeric
+      data, // ensure that the data is numeric
       deviceId: Number(deviceId),
       topic,
     });

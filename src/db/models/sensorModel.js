@@ -6,7 +6,7 @@ const sensorSchema = new Schema({
     required: true,
   },
   data: {
-    type: [Number],
+    type: [Schema.Types.Mixed],
     required: true,
   },
   deviceId: {
