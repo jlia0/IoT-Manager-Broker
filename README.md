@@ -30,6 +30,12 @@ yarn
 yarn start
 ```
 
+To enable auto-reload on changes:
+
+```sh
+yarn dev
+```
+
 Once the server started, open [localhost:3000/](http://localhost:3000/) in your browser.
 
 ## Authors
