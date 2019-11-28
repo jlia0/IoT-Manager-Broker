@@ -27,7 +27,7 @@ module.exports.storeData = async (message, sensor) => {
 };
 
 module.exports.getDevices = async () => {
-  const query = 'SELECT device_id FROM public.device';
+  const query = 'select * from device';
 
   try {
     const { rows } = await SQL(query);
